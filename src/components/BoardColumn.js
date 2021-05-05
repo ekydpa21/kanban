@@ -11,6 +11,7 @@ export default function BoardColumn({
   Draggable,
   provided,
   isChanged,
+  colIdx,
 }) {
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${id}/items`;
   const authToken =
@@ -138,6 +139,7 @@ export default function BoardColumn({
                 idx={idx}
                 key={item.id}
                 setIsChange={setIsChange}
+                colIdx={colIdx}
               />
             );
           })

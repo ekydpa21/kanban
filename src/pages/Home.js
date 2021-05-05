@@ -55,7 +55,7 @@ export default function Home() {
       <div className="content">
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
           {columns &&
-            columns.map((column) => {
+            columns.map((column, idx) => {
               const { id, title, description } = column;
               return (
                 <Droppable droppableId={id.toString()} key={id}>
@@ -69,6 +69,7 @@ export default function Home() {
                         Draggable={Draggable}
                         provided={provided}
                         isChanged={isChanged}
+                        colIdx={idx}
                       />
                     );
                   }}

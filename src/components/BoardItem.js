@@ -8,8 +8,15 @@ import deleteIcon from "../assets/trashIcon.svg";
 import warningIcon from "../assets/warningIcon.svg";
 import doneIcon from "../assets/doneIcon.svg";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-export default function BoardItem({ idx, item, Draggable, setIsChange }) {
+export default function BoardItem({
+  idx,
+  item,
+  Draggable,
+  setIsChange,
+  colIdx,
+}) {
   const { id, todo_id, name, progress_percentage } = item;
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
   const authToken =
@@ -25,12 +32,14 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
     }
   );
 
+  const { columns } = useSelector((state) => state.todos);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editInput, setEditInput] = useState({
     name: name,
     progress_percentage: progress_percentage,
   });
+  const lastIdx = columns.length - 1;
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -54,7 +63,7 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
     });
     setTimeout(() => {
       setIsChange(false);
-    }, 500);
+    }, 100);
   };
 
   const handleDelete = (e) => {
@@ -64,7 +73,31 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
     setIsChange(true);
     setTimeout(() => {
       setIsChange(false);
-    }, 500);
+    }, 100);
+  };
+
+  const handleMoveRight = (e) => {
+    e.preventDefault();
+    axios.patch(baseUrl, {
+      target_todo_id: columns[colIdx + 1].id,
+    });
+    setShowDeleteForm(false);
+    setIsChange(true);
+    setTimeout(() => {
+      setIsChange(false);
+    }, 100);
+  };
+
+  const handleMoveLeft = (e) => {
+    e.preventDefault();
+    axios.patch(baseUrl, {
+      target_todo_id: columns[colIdx - 1].id,
+    });
+    setShowDeleteForm(false);
+    setIsChange(true);
+    setTimeout(() => {
+      setIsChange(false);
+    }, 100);
   };
 
   return (
@@ -163,9 +196,9 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
               <div className="footer">
                 <div className="status">
                   {progress_percentage !== 100 ? (
-                    <div class="progress">
+                    <div className="progress">
                       <div
-                        class="progress-bar"
+                        className="progress-bar"
                         role="progressbar"
                         style={{
                           width: `${progress_percentage}%`,
@@ -177,9 +210,9 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
                       ></div>
                     </div>
                   ) : (
-                    <div class="progress" style={{ width: "90px" }}>
+                    <div className="progress" style={{ width: "90px" }}>
                       <div
-                        class="progress-bar"
+                        className="progress-bar"
                         role="progressbar"
                         style={{
                           width: `${progress_percentage}%`,
@@ -204,18 +237,22 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
                 <div className="option">
                   <img src={option} alt="option" />
                   <div className="dropdown">
-                    <div className="drop-button">
-                      <div className="icon">
-                        <img src={backward} alt="back" />
+                    {colIdx !== 0 && (
+                      <div className="drop-button" onClick={handleMoveLeft}>
+                        <div className="icon">
+                          <img src={backward} alt="back" />
+                        </div>
+                        <p>Move Left</p>
                       </div>
-                      <p>Move Left</p>
-                    </div>
-                    <div className="drop-button">
-                      <div className="icon">
-                        <img src={forward} alt="next" />
+                    )}
+                    {colIdx !== lastIdx && (
+                      <div className="drop-button" onClick={handleMoveRight}>
+                        <div className="icon">
+                          <img src={forward} alt="next" />
+                        </div>
+                        <p>Move Right</p>
                       </div>
-                      <p>Move Right</p>
-                    </div>
+                    )}
                     <div
                       className="drop-button"
                       onClick={() => {
