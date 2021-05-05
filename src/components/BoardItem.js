@@ -6,6 +6,7 @@ import forward from "../assets/nextIcon.svg";
 import editIcon from "../assets/editIcon.svg";
 import deleteIcon from "../assets/trashIcon.svg";
 import warningIcon from "../assets/warningIcon.svg";
+import doneIcon from "../assets/doneIcon.svg";
 import axios from "axios";
 
 export default function BoardItem({ idx, item, Draggable, setIsChange }) {
@@ -147,12 +148,7 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
         </div>
       </Modal>
 
-      <Draggable
-        id={item.id}
-        draggableId={item.id.toString()}
-        index={idx}
-        key={item.id}
-      >
+      <Draggable id={id} draggableId={id.toString()} index={idx} key={id}>
         {(provided, snapshot) => {
           return (
             <div
@@ -162,11 +158,48 @@ export default function BoardItem({ idx, item, Draggable, setIsChange }) {
               ref={provided.innerRef}
             >
               <div className="text-item">
-                <p>{item.name}</p>
+                <p>{name}</p>
               </div>
               <div className="footer">
                 <div className="status">
-                  <p>status</p>
+                  {progress_percentage !== 100 ? (
+                    <div class="progress">
+                      <div
+                        class="progress-bar"
+                        role="progressbar"
+                        style={{
+                          width: `${progress_percentage}%`,
+                          backgroundColor: "#1890FF",
+                          borderRadius: "8px",
+                        }}
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  ) : (
+                    <div class="progress" style={{ width: "90px" }}>
+                      <div
+                        class="progress-bar"
+                        role="progressbar"
+                        style={{
+                          width: `${progress_percentage}%`,
+                          backgroundColor: "#52C41A",
+                          borderRadius: "8px",
+                        }}
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
+                    </div>
+                  )}
+                  {progress_percentage !== 100 ? (
+                    <div className="percentage">
+                      <p>{progress_percentage}%</p>
+                    </div>
+                  ) : (
+                    <div className="percentage">
+                      <img src={doneIcon} alt="doneIcon" />
+                    </div>
+                  )}
                 </div>
                 <div className="option">
                   <img src={option} alt="option" />

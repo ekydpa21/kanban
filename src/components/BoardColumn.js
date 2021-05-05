@@ -33,7 +33,7 @@ export default function BoardColumn({
     name: "",
     progress_percentage: +"",
   });
-  console.log(items);
+
   const handleChange = (e) => {
     let { name, value } = e.target;
     if (name === "progress_percentage") {

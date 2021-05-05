@@ -268,13 +268,48 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
-.item-card .footer .status p {
+.item-card .footer .status .progress {
+  width: 82px;
+  height: 8px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.item-card .footer .status .percentage {
+  height: 100%;
+  width: 22px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.item-card .footer .status .percentage p {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: right;
   margin-bottom: 0;
+}
+
+.item-card .footer .status .percentage img {
+  width: 14px;
+  height: 14px;
 }
 
 .item-card .footer .option {
@@ -352,7 +387,7 @@
 }
 
 .item-card .footer .option .dropdown .drop-button:hover img {
-  color: #ffffff;
+  fill: #5e20b3;
 }
 
 .item-card .footer .option:hover .dropdown {

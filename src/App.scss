@@ -178,8 +178,6 @@
   }
   .footer {
     width: 90%;
-    // display: flex;
-    // justify-content: space-between;
     margin-bottom: 12px;
     .status {
       float: left;
@@ -187,9 +185,33 @@
       width: 114px;
       display: flex;
       flex-direction: row;
+      justify-content: space-between;
       align-items: center;
-      p {
-        margin-bottom: 0;
+      .progress {
+        width: 82px;
+        height: 8px;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+      }
+      .percentage {
+        height: 100%;
+        width: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        p {
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: right;
+          margin-bottom: 0;
+        }
+        img {
+          width: 14px;
+          height: 14px;
+        }
       }
     }
     .option {
@@ -243,7 +265,7 @@
         }
         .drop-button:hover {
           img {
-            color: #ffffff;
+            fill: #5e20b3;
           }
           color: #5e20b3;
         }
