@@ -10,6 +10,7 @@ export default function BoardColumn({
   description,
   Draggable,
   provided,
+  isChanged,
 }) {
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${id}/items`;
   const authToken =
@@ -32,7 +33,7 @@ export default function BoardColumn({
     name: "",
     progress_percentage: +"",
   });
-
+  console.log(items);
   const handleChange = (e) => {
     let { name, value } = e.target;
     if (name === "progress_percentage") {
@@ -48,10 +49,10 @@ export default function BoardColumn({
     axios
       .get(baseUrl)
       .then(({ data }) => {
-        setItems(data);
+        data.length === 0 ? setItems(undefined) : setItems(data);
       })
       .catch(console.log);
-  }, [baseUrl, isChange]);
+  }, [baseUrl, isChange, isChanged]);
 
   const save = (e) => {
     e.preventDefault();

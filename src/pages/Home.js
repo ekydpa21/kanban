@@ -22,6 +22,7 @@ axios.interceptors.request.use(
 export default function Home() {
   const dispatch = useDispatch();
   const { columns, loading, error } = useSelector((state) => state.todos);
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
     dispatch(fetchColumns());
@@ -33,12 +34,16 @@ export default function Home() {
     const { source, destination, draggableId } = result;
     if (source.droppableId !== destination.droppableId) {
       await axios.patch(
-        `${baseUrl}/${source.droppableId}/items/${+draggableId}`,
+        `${baseUrl}/${+source.droppableId}/items/${+draggableId}`,
         {
           target_todo_id: +destination.droppableId,
         }
       );
       dispatch(fetchColumns());
+      setIsChanged(true);
+      setTimeout(() => {
+        setIsChanged(false);
+      }, 100);
     }
   };
 
@@ -63,6 +68,7 @@ export default function Home() {
                         description={description}
                         Draggable={Draggable}
                         provided={provided}
+                        isChanged={isChanged}
                       />
                     );
                   }}
