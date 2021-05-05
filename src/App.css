@@ -150,6 +150,7 @@
   border-radius: 2px;
   padding: 1px, 8px, 1px, 8px;
   border: #ffadd2 solid 1px;
+  background: #fff0f6;
 }
 
 .column-board .title-board p {
@@ -159,6 +160,7 @@
   line-height: 20px;
   letter-spacing: 0em;
   text-align: center;
+  color: #eb2f96;
 }
 
 .column-board .category-board {
