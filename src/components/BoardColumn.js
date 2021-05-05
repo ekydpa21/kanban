@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import plusIcon from "../plus-icon.svg";
-import option from "../threeDot.svg";
+import plusIcon from "../assets/plus-icon.svg";
 import Modal from "react-modal";
-import { useDispatch } from "react-redux";
+import BoardItem from "./BoardItem";
 
 export default function BoardColumn({
   id,
@@ -26,7 +25,6 @@ export default function BoardColumn({
     }
   );
 
-  const dispatch = useDispatch();
   const [items, setItems] = useState();
   const [showAddForm, setShowAddForm] = useState(false);
   const [input, setInput] = useState({
@@ -66,6 +64,7 @@ export default function BoardColumn({
 
   return (
     <>
+      {/* Add Form Modal */}
       <Modal
         isOpen={showAddForm}
         className="AddModal shadow-lg"
@@ -73,7 +72,7 @@ export default function BoardColumn({
         onRequestClose={() => setShowAddForm(false)}
         ariaHideApp={false}
       >
-        <p>ini modal</p>
+        <p>Create Task</p>
         <form>
           <div style={{ marginBottom: "8px" }}>
             <label htmlFor="taskName" className="form-label label">
@@ -111,6 +110,7 @@ export default function BoardColumn({
           </div>
         </div>
       </Modal>
+
       <div
         className="column-board"
         {...provided.droppableProps}
@@ -125,36 +125,13 @@ export default function BoardColumn({
         {items ? (
           items.map((item, idx) => {
             return (
-              <Draggable
-                id={item.id}
-                draggableId={item.id.toString()}
-                index={idx}
+              <BoardItem
+                columnId={id}
+                Draggable={Draggable}
+                item={item}
+                idx={idx}
                 key={item.id}
-              >
-                {(provided, snapshot) => {
-                  console.log(provided, "----");
-                  return (
-                    <div
-                      className="item-card"
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <div className="text-item">
-                        <p>{item.name}</p>
-                      </div>
-                      <div className="footer">
-                        <div className="status">
-                          <p>status</p>
-                        </div>
-                        <div className="option">
-                          <img src={option} alt="option" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }}
-              </Draggable>
+              />
             );
           })
         ) : (

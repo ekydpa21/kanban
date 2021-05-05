@@ -252,16 +252,11 @@
 
 .item-card .footer {
   width: 90%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
   margin-bottom: 12px;
 }
 
 .item-card .footer .status {
+  float: left;
   height: 22px;
   width: 114px;
   display: -webkit-box;
@@ -281,21 +276,84 @@
 }
 
 .item-card .footer .option {
-  -ms-flex-item-align: end;
-      align-self: flex-end;
+  float: right;
   width: 24px;
   height: 24px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  display: inline-block;
   cursor: pointer;
 }
 
 .item-card .footer .option img {
   width: 15.75px;
+}
+
+.item-card .footer .option .dropdown {
+  margin-top: -10px;
+  display: none;
+  float: right;
+  position: absolute;
+  background: white;
+  width: 138px;
+  border-radius: 4px;
+  padding: 8px 0;
+}
+
+.item-card .footer .option .dropdown .drop-button {
+  padding-left: 21px;
+  padding-right: 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 32px;
+  width: 100%;
+}
+
+.item-card .footer .option .dropdown .drop-button .icon {
+  height: 15px;
+  width: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.item-card .footer .option .dropdown .drop-button .icon img {
+  width: 75%;
+}
+
+.item-card .footer .option .dropdown .drop-button p {
+  width: 74px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.item-card .footer .option .dropdown .drop-button:hover {
+  color: #5e20b3;
+}
+
+.item-card .footer .option .dropdown .drop-button:hover img {
+  color: #ffffff;
+}
+
+.item-card .footer .option:hover .dropdown {
+  display: block;
 }
 
 .empty-item-card {
@@ -339,6 +397,7 @@
 }
 
 .AddModal p {
+  color: #262626;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -414,6 +473,229 @@
 .AddModal .footer .button.save {
   margin-left: 8px;
   background: #27ae60;
+  color: #ffffff;
+}
+
+.Overlay {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(105, 105, 105, 0.623);
+}
+
+.EditModal {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  position: absolute;
+  width: 567px;
+  padding: 28px 29px 28px 33px;
+  background: white;
+  outline: none;
+}
+
+.EditModal p {
+  color: #262626;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.EditModal form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.EditModal form .label {
+  margin-bottom: 4px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.EditModal form .form {
+  height: 39px;
+}
+
+.EditModal form .progressForm {
+  height: 39px;
+  width: 99px !important;
+  margin-bottom: 43.5px;
+}
+
+.EditModal .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.EditModal .footer .button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 32px;
+  padding: 5px 16px;
+  border: 1px solid #d9d9d9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.EditModal .footer .button.save {
+  margin-left: 8px;
+  background: #27ae60;
+  color: #ffffff;
+}
+
+.Overlay {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(105, 105, 105, 0.623);
+}
+
+.DeleteModal {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  position: absolute;
+  width: 400px;
+  padding: 32px 32px 24px 32px;
+  background: white;
+  outline: none;
+}
+
+.DeleteModal .header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.DeleteModal .header img {
+  width: 21px;
+  height: 21px;
+}
+
+.DeleteModal .header .text-header {
+  width: 296px;
+  height: 24px;
+}
+
+.DeleteModal .header .text-header p {
+  color: #262626;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.DeleteModal .content {
+  width: 296px;
+  float: right;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+.DeleteModal .content p {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.DeleteModal .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.DeleteModal .footer .button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 32px;
+  padding: 5px 16px;
+  border: 1px solid #d9d9d9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.DeleteModal .footer .button.delete {
+  margin-left: 8px;
+  background: #eb5757;
+  color: #ffffff;
 }
 
 .Overlay {

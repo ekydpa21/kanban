@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../Logo.svg";
+import logo from "../assets/Logo.svg";
 
 export default function Sidebar() {
   return (

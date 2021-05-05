@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import BoardColumn from "../components/BoardColumn";
@@ -22,7 +22,6 @@ axios.interceptors.request.use(
 export default function Home() {
   const dispatch = useDispatch();
   const { columns, loading, error } = useSelector((state) => state.todos);
-  // const [pickedItem, setPickedItem] = useState();
 
   useEffect(() => {
     dispatch(fetchColumns());
