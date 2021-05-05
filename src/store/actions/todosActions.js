@@ -19,6 +19,13 @@ export const fetchLoading = () => {
   };
 };
 
+export const isChangedAction = (payload) => {
+  return {
+    type: "IS_CHANGED",
+    payload: payload,
+  };
+};
+
 export const storeColumns = (payload) => {
   return {
     type: "COLUMNS_FETCHING",

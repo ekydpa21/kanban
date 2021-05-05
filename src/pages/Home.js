@@ -1,9 +1,9 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import BoardColumn from "../components/BoardColumn";
-import { fetchColumns } from "../store/actions/todosActions";
+import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
 
 const baseUrl = "https://todos-project-api.herokuapp.com/todos";
 const authToken =
@@ -21,8 +21,7 @@ axios.interceptors.request.use(
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { columns, loading, error } = useSelector((state) => state.todos);
-  const [isChanged, setIsChanged] = useState(false);
+  const { columns } = useSelector((state) => state.todos);
 
   useEffect(() => {
     dispatch(fetchColumns());
@@ -39,10 +38,9 @@ export default function Home() {
           target_todo_id: +destination.droppableId,
         }
       );
-      dispatch(fetchColumns());
-      setIsChanged(true);
+      dispatch(isChangedAction(true));
       setTimeout(() => {
-        setIsChanged(false);
+        dispatch(isChangedAction(false));
       }, 100);
     }
   };
@@ -68,7 +66,6 @@ export default function Home() {
                         description={description}
                         Draggable={Draggable}
                         provided={provided}
-                        isChanged={isChanged}
                         colIdx={idx}
                       />
                     );

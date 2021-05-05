@@ -1,6 +1,7 @@
 const initialState = {
   loading: false,
   error: false,
+  isChanged: false,
   columns: [],
 };
 
@@ -21,6 +22,11 @@ function todosReducer(state = initialState, action) {
       return {
         ...state,
         error: true,
+      };
+    case "IS_CHANGED":
+      return {
+        ...state,
+        isChanged: action.payload,
       };
     default:
       return state;

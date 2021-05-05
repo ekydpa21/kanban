@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import plusIcon from "../assets/plus-icon.svg";
 import Modal from "react-modal";
 import BoardItem from "./BoardItem";
+import { useDispatch, useSelector } from "react-redux";
+import { isChangedAction } from "../store/actions/todosActions";
 
 export default function BoardColumn({
   id,
@@ -10,7 +12,6 @@ export default function BoardColumn({
   description,
   Draggable,
   provided,
-  isChanged,
   colIdx,
 }) {
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${id}/items`;
@@ -27,7 +28,8 @@ export default function BoardColumn({
     }
   );
 
-  const [isChange, setIsChange] = useState(false);
+  const dispatch = useDispatch();
+  const { isChanged } = useSelector((state) => state.todos);
   const [items, setItems] = useState();
   const [showAddForm, setShowAddForm] = useState(false);
   const [input, setInput] = useState({
@@ -53,20 +55,20 @@ export default function BoardColumn({
         data.length === 0 ? setItems(undefined) : setItems(data);
       })
       .catch(console.log);
-  }, [baseUrl, isChange, isChanged]);
+  }, [baseUrl, isChanged]);
 
   const save = (e) => {
     e.preventDefault();
     axios.post(baseUrl, input);
     setShowAddForm(false);
-    setIsChange(true);
     setInput({
       name: "",
       progress_percentage: +"",
     });
+    dispatch(isChangedAction(true));
     setTimeout(() => {
-      setIsChange(false);
-    }, 500);
+      dispatch(isChangedAction(false));
+    }, 100);
   };
 
   return (
@@ -138,7 +140,6 @@ export default function BoardColumn({
                 item={item}
                 idx={idx}
                 key={item.id}
-                setIsChange={setIsChange}
                 colIdx={colIdx}
               />
             );

@@ -8,15 +8,10 @@ import deleteIcon from "../assets/trashIcon.svg";
 import warningIcon from "../assets/warningIcon.svg";
 import doneIcon from "../assets/doneIcon.svg";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
 
-export default function BoardItem({
-  idx,
-  item,
-  Draggable,
-  setIsChange,
-  colIdx,
-}) {
+export default function BoardItem({ idx, item, Draggable, colIdx }) {
   const { id, todo_id, name, progress_percentage } = item;
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
   const authToken =
@@ -32,6 +27,7 @@ export default function BoardItem({
     }
   );
 
+  const dispatch = useDispatch();
   const { columns } = useSelector((state) => state.todos);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -56,13 +52,13 @@ export default function BoardItem({
     e.preventDefault();
     axios.put(baseUrl, editInput);
     setShowEditForm(false);
-    setIsChange(true);
     setEditInput({
       name: name,
       progress_percentage: progress_percentage,
     });
+    dispatch(isChangedAction(true));
     setTimeout(() => {
-      setIsChange(false);
+      dispatch(isChangedAction(false));
     }, 100);
   };
 
@@ -70,21 +66,21 @@ export default function BoardItem({
     e.preventDefault();
     axios.delete(baseUrl);
     setShowDeleteForm(false);
-    setIsChange(true);
+    dispatch(isChangedAction(true));
     setTimeout(() => {
-      setIsChange(false);
+      dispatch(isChangedAction(false));
     }, 100);
   };
 
-  const handleMoveRight = (e) => {
+  const handleMoveRight = async (e) => {
     e.preventDefault();
-    axios.patch(baseUrl, {
+    await axios.patch(baseUrl, {
       target_todo_id: columns[colIdx + 1].id,
     });
-    setShowDeleteForm(false);
-    setIsChange(true);
+    dispatch(fetchColumns());
+    dispatch(isChangedAction(true));
     setTimeout(() => {
-      setIsChange(false);
+      dispatch(isChangedAction(false));
     }, 100);
   };
 
@@ -93,10 +89,10 @@ export default function BoardItem({
     axios.patch(baseUrl, {
       target_todo_id: columns[colIdx - 1].id,
     });
-    setShowDeleteForm(false);
-    setIsChange(true);
+    dispatch(fetchColumns());
+    dispatch(isChangedAction(true));
     setTimeout(() => {
-      setIsChange(false);
+      dispatch(isChangedAction(false));
     }, 100);
   };
 
