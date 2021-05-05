@@ -8,7 +8,7 @@ import deleteIcon from "../assets/trashIcon.svg";
 import warningIcon from "../assets/warningIcon.svg";
 import axios from "axios";
 
-export default function BoardItem({ idx, item, Draggable }) {
+export default function BoardItem({ idx, item, Draggable, setIsChange }) {
   const { id, todo_id, name, progress_percentage } = item;
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
   const authToken =
@@ -44,18 +44,26 @@ export default function BoardItem({ idx, item, Draggable }) {
 
   const save = (e) => {
     e.preventDefault();
-    axios.patch(baseUrl, editInput);
+    axios.put(baseUrl, editInput);
     setShowEditForm(false);
+    setIsChange(true);
     setEditInput({
       name: name,
       progress_percentage: progress_percentage,
     });
+    setTimeout(() => {
+      setIsChange(false);
+    }, 500);
   };
 
   const handleDelete = (e) => {
     e.preventDefault();
     axios.delete(baseUrl);
     setShowDeleteForm(false);
+    setIsChange(true);
+    setTimeout(() => {
+      setIsChange(false);
+    }, 500);
   };
 
   return (

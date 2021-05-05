@@ -25,6 +25,7 @@ export default function BoardColumn({
     }
   );
 
+  const [isChange, setIsChange] = useState(false);
   const [items, setItems] = useState();
   const [showAddForm, setShowAddForm] = useState(false);
   const [input, setInput] = useState({
@@ -50,16 +51,20 @@ export default function BoardColumn({
         setItems(data);
       })
       .catch(console.log);
-  }, [baseUrl]);
+  }, [baseUrl, isChange]);
 
   const save = (e) => {
     e.preventDefault();
     axios.post(baseUrl, input);
     setShowAddForm(false);
+    setIsChange(true);
     setInput({
       name: "",
       progress_percentage: +"",
     });
+    setTimeout(() => {
+      setIsChange(false);
+    }, 500);
   };
 
   return (
@@ -131,6 +136,7 @@ export default function BoardColumn({
                 item={item}
                 idx={idx}
                 key={item.id}
+                setIsChange={setIsChange}
               />
             );
           })
