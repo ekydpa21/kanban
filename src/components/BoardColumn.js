@@ -121,7 +121,7 @@ export default function BoardColumn({
       </Modal>
 
       <div
-        className="column-board"
+        className={`column-board column-${colIdx}`}
         {...provided.droppableProps}
         ref={provided.innerRef}
       >
