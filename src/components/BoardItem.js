@@ -10,6 +10,7 @@ import doneIcon from "../assets/doneIcon.svg";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
+import Swal from "sweetalert2";
 
 export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
   const { id, todo_id, name, progress_percentage } = item;
@@ -50,11 +51,19 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
 
   const edit = (e) => {
     e.preventDefault();
-    axios.patch(baseUrl, {
-      target_todo_id: columnId,
-      name: editInput.name,
-      progress_percentage: editInput.progress_percentage,
-    });
+    if (editInput.progress_percentage > 100) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Max Progress value is 100",
+      });
+    } else {
+      axios.patch(baseUrl, {
+        target_todo_id: columnId,
+        name: editInput.name,
+        progress_percentage: editInput.progress_percentage,
+      });
+    }
     setShowEditForm(false);
     dispatch(fetchColumns());
     dispatch(isChangedAction(true));
