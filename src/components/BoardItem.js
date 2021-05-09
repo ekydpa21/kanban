@@ -40,13 +40,8 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
-    if (name === "progress_percentage") {
-      const newInput = { ...editInput, [name]: +value };
-      setEditInput(newInput);
-    } else {
-      const newInput = { ...editInput, [name]: value };
-      setEditInput(newInput);
-    }
+    const newInput = { ...editInput, [name]: value };
+    setEditInput(newInput);
   };
 
   const edit = (e) => {
@@ -68,7 +63,7 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
       axios.patch(baseUrl, {
         target_todo_id: columnId,
         name: editInput.name,
-        progress_percentage: editInput.progress_percentage,
+        progress_percentage: +editInput.progress_percentage,
       });
     }
     setShowEditForm(false);
