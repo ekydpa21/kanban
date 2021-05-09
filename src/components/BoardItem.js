@@ -15,7 +15,7 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
   const { id, todo_id, name, progress_percentage } = item;
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
   const authToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA0ODQxNTl9.CtAQRpl4Pbs2NZF3iUNKYkA9qyFrvHny5YllbixXonc";
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
 
   axios.interceptors.request.use(
     (config) => {
@@ -47,15 +47,20 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
       setEditInput(newInput);
     }
   };
-
-  const save = (e) => {
+  console.log(editInput);
+  const edit = (e) => {
     e.preventDefault();
-    axios.put(baseUrl, editInput);
+    axios.patch(baseUrl, {
+      target_todo_id: colIdx,
+      name: editInput.name,
+      progress_percentage: editInput.progress_percentage,
+    });
     setShowEditForm(false);
     setEditInput({
       name: name,
       progress_percentage: progress_percentage,
     });
+    dispatch(fetchColumns());
     dispatch(isChangedAction(true));
     setTimeout(() => {
       dispatch(isChangedAction(false));
@@ -66,6 +71,7 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
     e.preventDefault();
     axios.delete(baseUrl);
     setShowDeleteForm(false);
+    dispatch(fetchColumns());
     dispatch(isChangedAction(true));
     setTimeout(() => {
       dispatch(isChangedAction(false));
@@ -141,7 +147,7 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
           <div className="button" onClick={() => setShowEditForm(false)}>
             Cancel
           </div>
-          <div className="button save" onClick={save}>
+          <div className="button save" onClick={edit}>
             Save Task
           </div>
         </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 const baseUrl = "https://todos-project-api.herokuapp.com/todos";
 const authToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA0ODQxNTl9.CtAQRpl4Pbs2NZF3iUNKYkA9qyFrvHny5YllbixXonc";
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
 
 axios.interceptors.request.use(
   (config) => {
