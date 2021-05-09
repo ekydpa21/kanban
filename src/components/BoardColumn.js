@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import BoardItem from "./BoardItem";
 import { useDispatch, useSelector } from "react-redux";
 import { isChangedAction } from "../store/actions/todosActions";
+import Swal from "sweetalert2";
 
 export default function BoardColumn({
   id,
@@ -59,7 +60,15 @@ export default function BoardColumn({
 
   const save = (e) => {
     e.preventDefault();
-    axios.post(baseUrl, input);
+    if (input.progress_percentage < 0 || input.progress_percentage > 100) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Progress value is between 0 to 100",
+      });
+    } else {
+      axios.post(baseUrl, input);
+    }
     setShowAddForm(false);
     setInput({
       name: "",

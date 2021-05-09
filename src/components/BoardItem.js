@@ -51,11 +51,18 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
 
   const edit = (e) => {
     e.preventDefault();
-    if (editInput.progress_percentage > 100) {
+    if (
+      editInput.progress_percentage < 0 ||
+      editInput.progress_percentage > 100
+    ) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Max Progress value is 100",
+        text: "Progress value is between 0 to 100",
+      });
+      setEditInput({
+        name: name,
+        progress_percentage: progress_percentage,
       });
     } else {
       axios.patch(baseUrl, {
