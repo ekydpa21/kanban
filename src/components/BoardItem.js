@@ -11,7 +11,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
 
-export default function BoardItem({ idx, item, Draggable, colIdx }) {
+export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
   const { id, todo_id, name, progress_percentage } = item;
   const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
   const authToken =
@@ -47,19 +47,15 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
       setEditInput(newInput);
     }
   };
-  console.log(editInput);
+
   const edit = (e) => {
     e.preventDefault();
     axios.patch(baseUrl, {
-      target_todo_id: colIdx,
+      target_todo_id: columnId,
       name: editInput.name,
       progress_percentage: editInput.progress_percentage,
     });
     setShowEditForm(false);
-    setEditInput({
-      name: name,
-      progress_percentage: progress_percentage,
-    });
     dispatch(fetchColumns());
     dispatch(isChangedAction(true));
     setTimeout(() => {
@@ -125,7 +121,6 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
               onChange={handleChange}
               className="form-control form"
               id="taskName"
-              placeholder="example: Build rocket to Mars."
             />
           </div>
           <div>
@@ -139,7 +134,6 @@ export default function BoardItem({ idx, item, Draggable, colIdx }) {
               onChange={handleChange}
               className="form-control progressForm"
               id="progress"
-              placeholder="0%"
             />
           </div>
         </form>
