@@ -2,7 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Redirect } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { GuardProvider, GuardedRoute } from "react-router-guards";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -21,6 +21,8 @@ const requireLogin = (to, from, next) => {
         next.redirect("/login");
       } else if (to.location.pathname === "/register") {
         next.redirect("/register");
+      } else if (to.location.pathname === "/login") {
+        next.redirect("/login");
       }
       next.redirect("/login");
     }
@@ -35,14 +37,10 @@ function App() {
       <Router>
         <Navbar />
         <GuardProvider guards={[requireLogin]}>
-          <GuardedRoute exact path="/" meta={{ auth: true }}>
-            <Redirect to="/v1" />
-          </GuardedRoute>
-          <GuardedRoute path="/v1" meta={{ auth: true }}>
+          <GuardedRoute path="/" meta={{ auth: true }}>
             <Header />
             <Home />
           </GuardedRoute>
-          {/* <GuardedRoute path="/v1" component={Home} meta={{ auth: true }} /> */}
           <GuardedRoute path="/login" component={Login} meta={{ auth: true }} />
           <GuardedRoute
             path="/register"
