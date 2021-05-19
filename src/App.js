@@ -21,8 +21,6 @@ const requireLogin = (to, from, next) => {
         next.redirect("/login");
       } else if (to.location.pathname === "/register") {
         next.redirect("/register");
-      } else if (to.location.pathname === "/login") {
-        next.redirect("/login");
       }
       next.redirect("/login");
     }
