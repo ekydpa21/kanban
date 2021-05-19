@@ -20,7 +20,6 @@ export const fetchTodos = () => {
         type: "COLUMNS_FETCHING",
         payload: payload,
       });
-      // dispatch(storeColumns(payload));
     } catch (err) {
       return {
         type: "ERROR",

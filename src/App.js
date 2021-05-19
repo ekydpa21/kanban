@@ -2,7 +2,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import { GuardProvider, GuardedRoute } from "react-router-guards";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -35,7 +35,10 @@ function App() {
       <Router>
         <Navbar />
         <GuardProvider guards={[requireLogin]}>
-          <GuardedRoute path="/" meta={{ auth: true }}>
+          <GuardedRoute exact path="/" meta={{ auth: true }}>
+            <Redirect to="/home" />
+          </GuardedRoute>
+          <GuardedRoute path="/home" meta={{ auth: true }}>
             <Header />
             <Home />
           </GuardedRoute>
