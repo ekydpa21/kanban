@@ -1,17 +1,6 @@
 import axios from "axios";
-const baseUrl = "https://todos-project-api.herokuapp.com/todos";
-const authToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
-
-axios.interceptors.request.use(
-  (config) => {
-    config.headers.authorization = `Bearer ${authToken}`;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+const baseUrl = "https://new-kanbans.herokuapp.com/todos";
+const access_token = localStorage.getItem("access_token");
 
 export const fetchLoading = () => {
   return {
@@ -19,29 +8,91 @@ export const fetchLoading = () => {
   };
 };
 
-export const isChangedAction = (payload) => {
-  return {
-    type: "IS_CHANGED",
-    payload: payload,
-  };
-};
-
-export const storeColumns = (payload) => {
-  return {
-    type: "COLUMNS_FETCHING",
-    payload: payload,
-  };
-};
-
-export const fetchColumns = () => {
+export const fetchTodos = () => {
   return async (dispatch) => {
     try {
       dispatch(fetchLoading());
 
-      const response = await axios.get(baseUrl);
+      const response = await axios.get(baseUrl, { headers: { access_token } });
       const payload = response.data;
 
-      dispatch(storeColumns(payload));
+      dispatch({
+        type: "COLUMNS_FETCHING",
+        payload: payload,
+      });
+      // dispatch(storeColumns(payload));
+    } catch (err) {
+      return {
+        type: "ERROR",
+      };
+    }
+  };
+};
+
+export const addTodo = (newTodo) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchLoading());
+
+      await axios.post(baseUrl, newTodo, {
+        headers: { access_token },
+      });
+
+      dispatch(fetchTodos());
+    } catch (err) {
+      return {
+        type: "ERROR",
+      };
+    }
+  };
+};
+
+export const deleteTodo = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchLoading());
+
+      await axios.delete(`${baseUrl}/${id}`, {
+        headers: { access_token },
+      });
+
+      dispatch(fetchTodos());
+    } catch (err) {
+      return {
+        type: "ERROR",
+      };
+    }
+  };
+};
+
+export const editTodo = (id, updatedTodo) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchLoading());
+
+      await axios.put(`${baseUrl}/${id}`, updatedTodo, {
+        headers: { access_token },
+      });
+
+      dispatch(fetchTodos());
+    } catch (err) {
+      return {
+        type: "ERROR",
+      };
+    }
+  };
+};
+
+export const addTask = (todoId, newTask) => {
+  return async (dispatch) => {
+    try {
+      dispatch(fetchLoading());
+
+      await axios.post(`${baseUrl}/${todoId}/tasks`, newTask, {
+        headers: { access_token },
+      });
+
+      dispatch(fetchTodos());
     } catch (err) {
       return {
         type: "ERROR",

@@ -3,58 +3,41 @@ import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import BoardColumn from "../components/BoardColumn";
-import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
-
-const baseUrl = "https://todos-project-api.herokuapp.com/todos";
-const authToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
-
-axios.interceptors.request.use(
-  (config) => {
-    config.headers.authorization = `Bearer ${authToken}`;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+import { fetchTodos } from "../store/actions/todosActions";
 
 export default function Home() {
+  const baseUrl = "https://new-kanbans.herokuapp.com/todos";
+  const access_token = localStorage.getItem("access_token");
   const dispatch = useDispatch();
   const { columns } = useSelector((state) => state.todos);
 
   useEffect(() => {
-    dispatch(fetchColumns());
+    dispatch(fetchTodos());
     // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
 
   const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination, draggableId } = result;
     if (source.droppableId !== destination.droppableId) {
       await axios.patch(
-        `${baseUrl}/${+source.droppableId}/items/${+draggableId}`,
+        `${baseUrl}/${+source.droppableId}/tasks/${+draggableId}`,
         {
-          target_todo_id: +destination.droppableId,
-        }
+          newBoardId: +destination.droppableId,
+        },
+        { headers: { access_token } }
       );
-      dispatch(isChangedAction(true));
-      setTimeout(() => {
-        dispatch(isChangedAction(false));
-      }, 100);
+      dispatch(fetchTodos());
     }
   };
 
   return (
     <div className="home-container">
-      <div className="title">
-        <p>Product Roadmap</p>
-      </div>
       <div className="content">
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
           {columns &&
             columns.map((column, idx) => {
-              const { id, title, description } = column;
+              const { id, title, description, Tasks } = column;
               return (
                 <Droppable droppableId={id.toString()} key={id}>
                   {(provided, snapshot) => {
@@ -67,6 +50,7 @@ export default function Home() {
                         Draggable={Draggable}
                         provided={provided}
                         colIdx={idx}
+                        Tasks={Tasks}
                       />
                     );
                   }}

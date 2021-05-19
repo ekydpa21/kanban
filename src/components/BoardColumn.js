@@ -1,11 +1,14 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import plusIcon from "../assets/plus-icon.svg";
 import Modal from "react-modal";
 import BoardItem from "./BoardItem";
-import { useDispatch, useSelector } from "react-redux";
-import { isChangedAction } from "../store/actions/todosActions";
+import { useDispatch } from "react-redux";
+import { addTask, deleteTodo, editTodo } from "../store/actions/todosActions";
 import Swal from "sweetalert2";
+import option from "../assets/threeDot.svg";
+import editIcon from "../assets/editIcon.svg";
+import deleteIcon from "../assets/trashIcon.svg";
+import warningIcon from "../assets/warningIcon.svg";
 
 export default function BoardColumn({
   id,
@@ -14,49 +17,32 @@ export default function BoardColumn({
   Draggable,
   provided,
   colIdx,
+  Tasks,
 }) {
-  const baseUrl = `https://todos-project-api.herokuapp.com/todos/${id}/items`;
-  const authToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
-
-  axios.interceptors.request.use(
-    (config) => {
-      config.headers.authorization = `Bearer ${authToken}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-
   const dispatch = useDispatch();
-  const { isChanged } = useSelector((state) => state.todos);
-  const [items, setItems] = useState();
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [input, setInput] = useState({
-    name: "",
-    progress_percentage: +"",
+    task_todo: "",
+    progress_percentage: "",
+  });
+  const [editInput, setEditInput] = useState({
+    title: title,
+    description: description,
   });
 
-  const handleChange = (e) => {
+  const handleAddChange = (e) => {
     let { name, value } = e.target;
-    if (name === "progress_percentage") {
-      const newInput = { ...input, [name]: +value };
-      setInput(newInput);
-    } else {
-      const newInput = { ...input, [name]: value };
-      setInput(newInput);
-    }
+    const newInput = { ...input, [name]: value };
+    setInput(newInput);
   };
 
-  useEffect(() => {
-    axios
-      .get(baseUrl)
-      .then(({ data }) => {
-        data.length === 0 ? setItems(undefined) : setItems(data);
-      })
-      .catch(console.log);
-  }, [baseUrl, isChanged]);
+  const handleEditChange = (e) => {
+    let { name, value } = e.target;
+    const newInput = { ...editInput, [name]: value };
+    setEditInput(newInput);
+  };
 
   const save = (e) => {
     e.preventDefault();
@@ -67,17 +53,25 @@ export default function BoardColumn({
         text: "Progress value is between 0 to 100",
       });
     } else {
-      axios.post(baseUrl, input);
+      dispatch(addTask(id, input));
     }
     setShowAddForm(false);
     setInput({
       name: "",
-      progress_percentage: +"",
+      progress_percentage: "",
     });
-    dispatch(isChangedAction(true));
-    setTimeout(() => {
-      dispatch(isChangedAction(false));
-    }, 100);
+  };
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    dispatch(deleteTodo(id));
+    setShowDeleteForm(false);
+  };
+
+  const edit = (e) => {
+    e.preventDefault();
+    dispatch(editTodo(id, editInput));
+    setShowEditForm(false);
   };
 
   return (
@@ -94,12 +88,12 @@ export default function BoardColumn({
         <form>
           <div style={{ marginBottom: "8px" }}>
             <label htmlFor="taskName" className="form-label label">
-              Task Name
+              Task Title
             </label>
             <input
               type="text"
-              name="name"
-              onChange={handleChange}
+              name="task_todo"
+              onChange={handleAddChange}
               className="form-control form"
               id="taskName"
               placeholder="example: Build rocket to Mars."
@@ -112,7 +106,7 @@ export default function BoardColumn({
             <input
               type="text"
               name="progress_percentage"
-              onChange={handleChange}
+              onChange={handleAddChange}
               className="form-control progressForm"
               id="progress"
               placeholder="0%"
@@ -129,37 +123,145 @@ export default function BoardColumn({
         </div>
       </Modal>
 
+      {/* Edit Todo Form Modal */}
+      <Modal
+        isOpen={showEditForm}
+        className="EditTodoModal shadow-lg"
+        overlayClassName="Overlay"
+        onRequestClose={() => setShowEditForm(false)}
+        ariaHideApp={false}
+      >
+        <p>Edit Todo</p>
+        <form>
+          <div style={{ marginBottom: "8px" }}>
+            <label htmlFor="todoTitle" className="form-label label">
+              Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={editInput.title}
+              onChange={handleEditChange}
+              className="form-control form"
+              id="todoTitle"
+            />
+          </div>
+          <div>
+            <label htmlFor="descriptionTodo" className="form-label label">
+              Description
+            </label>
+            <input
+              type="text"
+              name="description"
+              value={editInput.description}
+              onChange={handleEditChange}
+              className="form-control descriptionTodoForm"
+              id="descriptionTodo"
+            />
+          </div>
+        </form>
+        <div className="footer">
+          <div className="button" onClick={() => setShowEditForm(false)}>
+            Cancel
+          </div>
+          <div className="button save" onClick={edit}>
+            Save
+          </div>
+        </div>
+      </Modal>
+
+      {/* Delete Modal */}
+      <Modal
+        isOpen={showDeleteForm}
+        className="DeleteModal shadow-lg"
+        overlayClassName="Overlay"
+        onRequestClose={() => setShowDeleteForm(false)}
+        ariaHideApp={false}
+      >
+        <div className="header">
+          <img src={warningIcon} alt="warning" />
+          <div className="text-header">
+            <p>Delete Todo</p>
+          </div>
+        </div>
+        <div className="content">
+          <p>
+            Are you sure want to delete this Todo? <br /> your action can’t be
+            reverted.
+          </p>
+        </div>
+        <div className="footer">
+          <div className="button" onClick={() => setShowDeleteForm(false)}>
+            Cancel
+          </div>
+          <div className="button delete" onClick={handleDelete}>
+            Delete
+          </div>
+        </div>
+      </Modal>
+
       <div
         className={`column-board column-${colIdx}`}
         {...provided.droppableProps}
         ref={provided.innerRef}
       >
-        <div className="title-board">
-          <p>{title}</p>
+        <div className="board-header">
+          <div className="title-board">
+            <p>{title}</p>
+          </div>
+          <div className="board-option">
+            <img src={option} alt="option" />
+            <div className="dropdown">
+              <div
+                className="drop-button"
+                onClick={() => {
+                  setShowEditForm(true);
+                }}
+              >
+                <div className="icon">
+                  <img src={editIcon} alt="back" />
+                </div>
+                <p>Edit</p>
+              </div>
+              <div
+                className="drop-button"
+                onClick={() => {
+                  setShowDeleteForm(true);
+                }}
+              >
+                <div className="icon">
+                  <img src={deleteIcon} alt="back" />
+                </div>
+                <p>Delete</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="category-board">
           <p>{description}</p>
         </div>
-        {items ? (
-          items.map((item, idx) => {
-            return (
-              <BoardItem
-                columnId={id}
-                Draggable={Draggable}
-                item={item}
-                idx={idx}
-                key={item.id}
-                colIdx={colIdx}
-              />
-            );
-          })
-        ) : (
-          <div className="empty-item-card">
-            <div className="text-item">
-              <p>No Task Available</p>
+        <div className="task-container">
+          {Tasks.length !== 0 ? (
+            Tasks.map((item, idx) => {
+              return (
+                <BoardItem
+                  columnId={id}
+                  Draggable={Draggable}
+                  item={item}
+                  idx={idx}
+                  key={item.id}
+                  colIdx={colIdx}
+                />
+              );
+            })
+          ) : (
+            <div className="empty-item-card">
+              <div className="text-item">
+                <p>No Task Available</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         {provided.placeholder}
         <div className="addButton" onClick={() => setShowAddForm(true)}>
           <img src={plusIcon} alt="plus-icon" />

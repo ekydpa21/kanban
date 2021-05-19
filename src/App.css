@@ -3,10 +3,11 @@
 * {
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0;
   height: 5px;
 }
 
@@ -21,36 +22,135 @@
 
 .App {
   font-family: "Rubik", sans-serif;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
+  width: 100%;
 }
 
-.sidebar {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  width: 68px;
-  height: 100vh;
-  background: #2f3136;
+.loading-screen {
+  width: 100%;
+  height: 80vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.sidebar img {
+.navbar {
+  height: 60px;
+  background: #2f3136;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  padding: 0 50px !important;
+}
+
+.navbar img {
   position: -webkit-sticky;
   position: sticky;
-  top: 20px;
+  width: 100px;
+  height: 30px;
+}
+
+.navbar .btn {
+  width: 70px;
+  height: 30px;
+  font-size: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.auth-container {
+  background-color: #e2e2e2;
+  width: 100%;
+  height: 90vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.auth-container .auth-card {
+  width: 40%;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: white;
+}
+
+.auth-container .auth-card .title {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.auth-container .auth-card .footer {
   margin-top: 20px;
-  width: 46.44px;
-  height: 33px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.auth-container .auth-card .footer p {
+  margin-right: 5px;
+}
+
+.home-header {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 20px 50px 20px 50px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px;
+  left: 0;
+  background-color: white;
+}
+
+.home-header p {
+  margin-bottom: 0;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.home-header button {
+  height: 30px;
+  font-size: 12px;
+  text-align: center;
 }
 
 .home-container {
@@ -67,34 +167,21 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin: 20px 42px;
+  padding: 0px 50px 20px 50px;
   background: white;
-}
-
-.home-container .title {
-  margin-bottom: 24px;
-  margin-left: 8px;
-  -ms-flex-item-align: start;
-      align-self: flex-start;
-  position: -webkit-sticky;
-  position: sticky;
-  left: 118px;
-}
-
-.home-container .title p {
-  font-size: 20px;
-  line-height: 20px;
-  font-weight: 500;
 }
 
 .home-container .content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   width: 100%;
+  height: 80vh;
+  gap: 10px;
+  overflow-x: scroll;
 }
 
 .column-board {
@@ -108,29 +195,33 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 306px;
+  min-width: 306px;
   min-height: 184px;
   height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
   border-radius: 4px;
-  margin: 0 8px;
 }
 
-.column-board .title-board {
-  -ms-flex-item-align: start;
-      -ms-grid-row-align: start;
-      align-self: start;
-  height: 22px;
-  width: 86px;
-  margin-left: 12px;
-  margin-top: 12px;
+.column-board .board-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  padding: 12px 12px 6px 12px;
+}
+
+.column-board .board-header .title-board {
+  height: 23px;
   margin-bottom: 4px;
   border-radius: 2px;
-  padding: 1px, 8px, 1px, 8px;
+  padding: 1px 8px;
 }
 
-.column-board .title-board p {
+.column-board .board-header .title-board p {
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -139,13 +230,95 @@
   text-align: center;
 }
 
+.column-board .board-header .board-option {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+
+.column-board .board-header .board-option img {
+  width: 15.75px;
+}
+
+.column-board .board-header .board-option .dropdown {
+  margin-top: -15px;
+  margin-left: -40px;
+  display: none;
+  float: right;
+  position: absolute;
+  background: white;
+  width: 138px;
+  border-radius: 4px;
+  padding: 8px 0;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button {
+  padding-left: 21px;
+  padding-right: 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 32px;
+  width: 100%;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button .icon {
+  height: 15px;
+  width: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button .icon img {
+  width: 75%;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button p {
+  width: 74px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button:hover {
+  color: #5e20b3;
+}
+
+.column-board .board-header .board-option .dropdown .drop-button:hover img {
+  fill: #5e20b3;
+}
+
+.column-board .board-header .board-option:hover .dropdown {
+  display: block;
+}
+
 .column-board .category-board {
   -ms-flex-item-align: start;
       -ms-grid-row-align: start;
       align-self: start;
-  height: 20px;
-  margin-left: 12px;
-  margin-bottom: 10px;
+  min-height: 20px;
+  width: 100%;
+  padding: 0 12px 10px 12px;
 }
 
 .column-board .category-board p {
@@ -155,6 +328,19 @@
   line-height: 20px;
   letter-spacing: 0px;
   text-align: left;
+}
+
+.column-board .task-container {
+  width: 100%;
+  max-height: 380px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow-y: scroll;
 }
 
 .column-board .addButton {
@@ -177,7 +363,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  margin-top: -10px;
+  margin-top: -5px;
 }
 
 .column-board .addButton p {
@@ -270,7 +456,7 @@
   border: #e4e4e8 solid 1px;
   border-radius: 4px;
   width: 92%;
-  height: 116px;
+  min-height: 116px;
   margin: 0 12px 12px 12px;
   background: white;
   display: -webkit-box;
@@ -343,7 +529,7 @@
 
 .item-card .footer .status .percentage {
   height: 100%;
-  width: 22px;
+  width: 25px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -673,6 +859,216 @@
 }
 
 .EditModal .footer .button.save {
+  margin-left: 8px;
+  background: #27ae60;
+  color: #ffffff;
+}
+
+.Overlay {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(105, 105, 105, 0.623);
+}
+
+.AddTodoModal {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  position: absolute;
+  width: 567px;
+  padding: 28px 29px 28px 33px;
+  background: white;
+  outline: none;
+}
+
+.AddTodoModal p {
+  color: #262626;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.AddTodoModal form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.AddTodoModal form .label {
+  margin-bottom: 4px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.AddTodoModal form .form {
+  height: 39px;
+}
+
+.AddTodoModal form .descriptionForm {
+  height: 39px;
+  margin-bottom: 43.5px;
+}
+
+.AddTodoModal .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.AddTodoModal .footer .button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 32px;
+  padding: 5px 16px;
+  border: 1px solid #d9d9d9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.AddTodoModal .footer .button.save {
+  margin-left: 8px;
+  background: #27ae60;
+  color: #ffffff;
+}
+
+.Overlay {
+  position: fixed;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(105, 105, 105, 0.623);
+}
+
+.EditTodoModal {
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  position: absolute;
+  width: 567px;
+  padding: 28px 29px 28px 33px;
+  background: white;
+  outline: none;
+}
+
+.EditTodoModal p {
+  color: #262626;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.EditTodoModal form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.EditTodoModal form .label {
+  margin-bottom: 4px;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.EditTodoModal form .form {
+  height: 39px;
+}
+
+.EditTodoModal form .descriptionTodoForm {
+  height: 39px;
+  margin-bottom: 43.5px;
+}
+
+.EditTodoModal .footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.EditTodoModal .footer .button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 32px;
+  padding: 5px 16px;
+  border: 1px solid #d9d9d9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.EditTodoModal .footer .button.save {
   margin-left: 8px;
   background: #27ae60;
   color: #ffffff;

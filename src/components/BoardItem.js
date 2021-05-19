@@ -9,31 +9,20 @@ import warningIcon from "../assets/warningIcon.svg";
 import doneIcon from "../assets/doneIcon.svg";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchColumns, isChangedAction } from "../store/actions/todosActions";
+import { fetchTodos } from "../store/actions/todosActions";
 import Swal from "sweetalert2";
 
 export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
-  const { id, todo_id, name, progress_percentage } = item;
-  const baseUrl = `https://todos-project-api.herokuapp.com/todos/${todo_id}/items/${id}`;
-  const authToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MjA4ODY2OTh9.SKIV2sXUShLHAnuSl9r9kOa9vK84EE9nmJa624jx8Pg";
-
-  axios.interceptors.request.use(
-    (config) => {
-      config.headers.authorization = `Bearer ${authToken}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+  const { id, boardId, task_todo, progress_percentage } = item;
+  const baseUrl = `https://new-kanbans.herokuapp.com/todos/${boardId}/tasks/${id}`;
+  const access_token = localStorage.getItem("access_token");
 
   const dispatch = useDispatch();
   const { columns } = useSelector((state) => state.todos);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editInput, setEditInput] = useState({
-    name: name,
+    task_todo: task_todo,
     progress_percentage: progress_percentage,
   });
   const lastIdx = columns.length - 1;
@@ -56,57 +45,52 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
         text: "Progress value is between 0 to 100",
       });
       setEditInput({
-        name: name,
+        task_todo: task_todo,
         progress_percentage: progress_percentage,
       });
     } else {
-      axios.patch(baseUrl, {
-        target_todo_id: columnId,
-        name: editInput.name,
-        progress_percentage: +editInput.progress_percentage,
-      });
+      axios.put(
+        baseUrl,
+        {
+          task_todo: editInput.task_todo,
+          progress_percentage: +editInput.progress_percentage,
+        },
+        { headers: { access_token } }
+      );
     }
     setShowEditForm(false);
-    dispatch(fetchColumns());
-    dispatch(isChangedAction(true));
-    setTimeout(() => {
-      dispatch(isChangedAction(false));
-    }, 100);
+    dispatch(fetchTodos());
   };
 
   const handleDelete = (e) => {
     e.preventDefault();
-    axios.delete(baseUrl);
+    axios.delete(baseUrl, { headers: { access_token } });
     setShowDeleteForm(false);
-    dispatch(fetchColumns());
-    dispatch(isChangedAction(true));
-    setTimeout(() => {
-      dispatch(isChangedAction(false));
-    }, 100);
+    dispatch(fetchTodos());
   };
 
   const handleMoveRight = async (e) => {
     e.preventDefault();
-    await axios.patch(baseUrl, {
-      target_todo_id: columns[colIdx + 1].id,
-    });
-    dispatch(fetchColumns());
-    dispatch(isChangedAction(true));
-    setTimeout(() => {
-      dispatch(isChangedAction(false));
-    }, 100);
+    await axios.patch(
+      baseUrl,
+      {
+        newBoardId: columns[colIdx + 1].id,
+      },
+      { headers: { access_token } }
+    );
+    dispatch(fetchTodos());
   };
 
   const handleMoveLeft = (e) => {
     e.preventDefault();
-    axios.patch(baseUrl, {
-      target_todo_id: columns[colIdx - 1].id,
-    });
-    dispatch(fetchColumns());
-    dispatch(isChangedAction(true));
-    setTimeout(() => {
-      dispatch(isChangedAction(false));
-    }, 100);
+    axios.patch(
+      baseUrl,
+      {
+        newBoardId: columns[colIdx - 1].id,
+      },
+      { headers: { access_token } }
+    );
+    dispatch(fetchTodos());
   };
 
   return (
@@ -127,8 +111,8 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
             </label>
             <input
               type="text"
-              name="name"
-              value={editInput.name}
+              name="task_todo"
+              value={editInput.task_todo}
               onChange={handleChange}
               className="form-control form"
               id="taskName"
@@ -198,7 +182,7 @@ export default function BoardItem({ idx, item, Draggable, colIdx, columnId }) {
               ref={provided.innerRef}
             >
               <div className="text-item">
-                <p>{name}</p>
+                <p>{task_todo}</p>
               </div>
               <div className="footer">
                 <div className="status">
